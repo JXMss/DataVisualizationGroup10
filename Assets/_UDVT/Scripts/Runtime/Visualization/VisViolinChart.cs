@@ -318,7 +318,7 @@ public class VisViolinChart : Vis
         //## 01:  Create Axes and Grids
         // X Axis
         visContainer.CreateAxis(dataSets[0].ElementAt(0).Key, xValuesMirrored, Direction.X);
-        visContainer.CreateGrid(Direction.X, Direction.Y);
+        // visContainer.CreateGrid(Direction.X, Direction.Y);
 
         // Y Axis
         //visContainer.CreateAxis(dataSets[0].ElementAt(1).Key, binData.yValues, Direction.Y);

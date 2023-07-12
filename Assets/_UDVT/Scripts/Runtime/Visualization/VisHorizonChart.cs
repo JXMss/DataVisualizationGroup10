@@ -512,13 +512,15 @@ public class VisHorizonChart : Vis
     {
         base.CreateVis(container);
 
-        // double bandHeight = 10.0f;
-        double bandHeight = 0.005f;
-        //double baseline = 0.006;
-        double baseline = 0.0185;
+        // double bandHeight = 0.027f;
+        // double baseline = 0.0714;
         double[,] DensityCalculate = KernelDensityEstimation.KDE(dataSets[0].ElementAt(0).Value, 1, 100);
         double[] xValues = Enumerable.Range(0, DensityCalculate.GetLength(0)).Select(i => DensityCalculate[i, 0]).ToArray();
         double[] yValues = Enumerable.Range(0, DensityCalculate.GetLength(0)).Select(i => DensityCalculate[i, 1]).ToArray();
+        
+        double bandHeight = 0.01f;
+        // double baseline = 0.0714;
+        double baseline = GetProperHeight(yValues);
 
         xyValues xyValue = GetJunctionPoint(xValues, yValues, bandHeight, baseline);
         double[] xValuesProcessed = xyValue.xValues;
@@ -545,12 +547,32 @@ public class VisHorizonChart : Vis
         visContainer.SetChannel(VisChannel.ZSize, sizeList);
         //## 03: Draw all Data Points with the provided Channels 
         visContainer.CreateDataMarks(dataMarkPrefab);
-        Draw(visContainer.dataMarkList, bandHeight, layeredValues, xyValue.numNegativeBands);
+        Draw(visContainer.dataMarkList, bandHeight, layeredValues, xyValue.numNegativeBands, true, true);
         // ConnectPoints(visContainer.dataMarkList);
         //## 04: Rescale Chart
         visContainerObject.transform.localScale = new Vector3(width, height, depth);
 
         return visContainerObject;
+    }
+
+    private double GetProperHeight(double[] points)
+    {
+        double maxHeight = double.NegativeInfinity;
+        double minHeight = double.PositiveInfinity;
+        
+        foreach (var point in points)
+        {
+            if (point > maxHeight)
+            {
+                maxHeight = point;
+            }
+            if (point < minHeight)
+            {
+                minHeight = point;
+            }
+        }
+
+        return (maxHeight + minHeight) / 2.0;
     }
     
     public class xyValues
@@ -570,7 +592,7 @@ public class VisHorizonChart : Vis
     {
         double closestBandLine = 0.0f;
         int numBandLine = 1;
-        if (yV >= 0)
+        if (yV > 0)
         {
             while (numBandLine * bandHeight <= yV)
             {
@@ -586,7 +608,7 @@ public class VisHorizonChart : Vis
                 numBandLine += 1;
             }
 
-            return (numBandLine - 1) * bandHeight * -1;
+            return numBandLine * bandHeight * -1;
         }
     }
 
@@ -594,7 +616,7 @@ public class VisHorizonChart : Vis
     {
         double closestBandLine = 0.0f;
         int numBandLine = 1;
-        if (yV >= 0)
+        if (yV > 0)
         {
             while (numBandLine * bandHeight <= yV)
             {
@@ -610,7 +632,7 @@ public class VisHorizonChart : Vis
                 numBandLine += 1;
             }
 
-            return numBandLine * bandHeight * -1;
+            return (numBandLine - 1) * bandHeight * -1;
         }
     }
 
@@ -623,8 +645,8 @@ public class VisHorizonChart : Vis
         double previousPointY = 0.0;
         double Lower;
         double Higher;
-        double tempMaxY = 0.0;
-        double tempMinY = 0.0;
+        double tempMaxY = double.NegativeInfinity;
+        double tempMinY = double.PositiveInfinity;
         double[] dataListX = new double[oDataListX.Length + 2];
         double[] dataListY = new double[oDataListY.Length + 2];
 
@@ -655,14 +677,6 @@ public class VisHorizonChart : Vis
         List<double> xValueModified = new List<double>();
         List<double> yValueModified = new List<double>();
         List<int> layeredDataList = new List<int>();
-        
-        // double Lower0 = GetClosestBandLineLower(dataListY[0], bandHeight);
-        // xValueModified.Add(dataListX[0]);
-        // yValueModified.Add(Lower0);
-        // layeredDataList.Add((int)(Lower0 / bandHeight) + numNegativeBands);
-        // xValueModified.Add(dataListX[0]);
-        // yValueModified.Add(dataListY[0]);
-        // layeredDataList.Add((int)(Lower0 / bandHeight) + numNegativeBands);
 
         for (int i = 0; i < dataListX.Length; i++)
         {
@@ -722,8 +736,8 @@ public class VisHorizonChart : Vis
             else
             {
                 // negative number！！！！
-                Higher = GetClosestBandLineLower(dataListY[i], bandHeight);
-                Lower = GetClosestBandLineHigher(dataListY[i], bandHeight);
+                Lower = GetClosestBandLineLower(dataListY[i], bandHeight);
+                Higher = GetClosestBandLineHigher(dataListY[i], bandHeight);
                 if (IsInTheBand(previousPointY, Higher, Lower) ^ IsInTheBand(dataListY[i], Higher, Lower))
                 {
                     if (dataListY[i] > previousPointY)
@@ -774,27 +788,16 @@ public class VisHorizonChart : Vis
                 previousPointY = dataListY[i];
             }
         }
-        // Lower = GetClosestBandLineLower(dataListY[dataListY.Length - 1], bandHeight);
-        // xValueModified.Add(dataListX[dataListX.Length - 1]);
-        // yValueModified.Add(Lower);
-        // if (Lower >= 0)
-        // {
-        //     layeredDataList.Add((int)(Lower / bandHeight) - 1 + numNegativeBands);
-        // }
-        // else
-        // {
-        //     layeredDataList.Add((int)Math.Abs((Lower / bandHeight) - 1));
-        // }
         return new xyValues { xValues = xValueModified.ToArray(), yValues = yValueModified.ToArray(), layeredIndex = layeredDataList.ToArray(), numNegativeBands = numNegativeBands };
     }
 
-    private void Draw(List<DataMark> dataList, double bandHeight, int[] layeredValuesArray, int numNegativeBands)
+    private void Draw(List<DataMark> dataList, double bandHeight, int[] layeredValuesArray, int numNegativeBands, bool flagCompress, bool flagFlips)
     {
         int maxNumLayers = layeredValuesArray.Max() + 1;
         List<Vector3>[] layeredData = new List<Vector3>[maxNumLayers];
         layeredData = LayeringData(dataList, layeredValuesArray);
         // ConnectLayerPoints(layeredData);
-        CreateFillArea(layeredData, numNegativeBands);
+        CreateFillArea(layeredData, numNegativeBands, flagCompress, flagFlips);
     }
 
     private List<Vector3>[] LayeringData(List<DataMark> dataList, int[] layeredValuesArray)
@@ -807,6 +810,7 @@ public class VisHorizonChart : Vis
         foreach (var point in dataList)
         {
             var p = point.GetDataMarkChannel().position / 4.0f;
+
             Vector3 pointOrigin = new Vector3(p.x, p.y, p.z);// 参考下面// if (k < numNegativeBands)那行开始修改
             originalPoints.Add(pointOrigin);
         }
@@ -860,41 +864,55 @@ public class VisHorizonChart : Vis
         lineRenderer.positionCount = dataList.Count;
         lineRenderer.startWidth = 0.0002f;
         lineRenderer.endWidth = 0.0002f;
-        // lineRenderer.startWidth = 0.000f;
-        // lineRenderer.endWidth = 0.000f;
         lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
 
         lineRenderer.SetPositions(dataList.ToArray());
     }
     
-    private void CreateFillArea(List<Vector3>[] dataList, int numNegativeBands)
+    private void CreateFillArea(List<Vector3>[] dataList, int numNegativeBands, bool flagCompress, bool flagFlips)
     {
         Color darkRed = new Color(139/255f, 0f, 0f, 65/240f);
         Color lightRed = new Color(255/255f, 128/255f, 128/255f, 220/240f);
-        Color darkBlue = new Color(0f, 0f, 255/255f, 120/240f);
+        Color darkBlue = new Color(0f, 0f, 139/255f, 65/240f);
         Color lightBlue = new Color(153/255f, 217/255f, 234/255f, 182/240f);
         Color[] selectedColorsPositive = new Color[] {lightRed, darkRed};
         Color[] selectedColorsNegative = new Color[] {darkBlue, lightBlue};
+        Color[] selectedColorsNegativeReversed = (Color[])selectedColorsNegative.Clone();
+        Array.Reverse(selectedColorsNegativeReversed);
         double maxV = double.NegativeInfinity;
         double minV = double.PositiveInfinity;
         double baseLinePosition = 0.0;
-
+        double modifiedHeightBand;
+        if (flagCompress && dataList.Length > 2)
+        {
+            // Debug.Log(dataList.Length);
+            int targetIndex = (int)Math.Ceiling(dataList.Length / 2.0);
+            // Debug.Log(targetIndex);
+            modifiedHeightBand = dataList[targetIndex + 1][0].y - dataList[targetIndex][0].y;
+            // Debug.Log(dataList[targetIndex][0].y);
+            // Debug.Log(modifiedHeightBand);
+            // modifiedHeightBand = dataList[1][0].y - dataList[0][0].y;
+        }
+        else
+        {
+            modifiedHeightBand = 0.0;
+        }
+        float pointX;
+        float pointY;
+        float pointZ;
+        float zDepth = 0.00001f;
+        
         for (int listIndex = 0; listIndex < dataList.Length; listIndex++)
         {
-            Debug.Log("====================" + listIndex + "======================");
             foreach (var V in dataList[listIndex])
             {
-                Debug.Log("--------------------------------");
-                Debug.Log(V.y);
-                Debug.Log(maxV);
-                Debug.Log(minV);
-                if (V.y > maxV)
+                if (V.y * 4.0f > maxV)
                 {
-                    maxV = V.y;
+                    maxV = V.y * 4.0f;
                 }
-                if (V.y < minV)
+                if (V.y * 4.0f < minV)
                 {
-                    minV = V.y;
+                    minV = V.y * 4.0f;
                 }
             }
             if (listIndex == numNegativeBands)
@@ -902,70 +920,69 @@ public class VisHorizonChart : Vis
                 baseLinePosition = dataList[listIndex][0].y;
             }
         }
-        Debug.Log("max" + maxV + "  mid" + baseLinePosition + "  min" + minV);
+        double modifiedBaseLine = dataList[numNegativeBands][0].y * 4.0f;
+
         for (int k = 0; k < dataList.Length; k++)
         {
             if (dataList[k].Count != 0)
             {
                 Vector3[] points = new Vector3[dataList[k].Count];
-                double maxLayerV = 0.0;
-                double minLayerV = 0.0;
-                
-                for (int i = 0; i < dataList[k].Count; i++)
+                double maxLayerV = double.NegativeInfinity;
+                double minLayerV = double.PositiveInfinity;
+                if (k < numNegativeBands && !flagFlips)
                 {
-                    points[i] = dataList[k][i] * 4.0f;
-                    if (maxLayerV < points[i].y / 2.0f)
+                    for (int kk = 0; kk < dataList[k].Count; kk++)
                     {
-                        maxLayerV = points[i].y / 2.0f;
-                    }
-                    if (minLayerV > points[i].y / 2.0f)
-                    {
-                        minLayerV = points[i].y / 2.0f;
+                        pointX = dataList[k][kk].x * 4.0f;
+                        pointY = (float)(dataList[k][kk].y + modifiedHeightBand * (numNegativeBands - k - 1)) * 4.0f;
+                        pointZ = dataList[k][kk].z * 4.0f + zDepth * k;
+                        points[kk] = new Vector3(pointX, pointY, pointZ);
+                        if (maxLayerV < dataList[k][kk].y * 4.0f)
+                        {
+                            maxLayerV = dataList[k][kk].y * 4.0f;
+                        }
+                        if (minLayerV > dataList[k][kk].y * 4.0f)
+                        {
+                            minLayerV = dataList[k][kk].y * 4.0f;
+                        }
                     }
                 }
-                // if (k < numNegativeBands)
-                // {
-                //     for (int i = 0; i < dataList[k].Count; i++)
-                //     {
-                //         Debug.Log("==============================================");
-                //         Debug.Log(dataList[k][i] * 4.0f);
-                //         Debug.Log(modifiedHeightBand);
-                //         pointX = dataList[k][i].x * 4.0f;
-                //         pointY = (float)(dataList[k][i].y + modifiedHeightBand * (numNegativeBands - k - 1));
-                //         pointZ = dataList[k][i].z * 4.0f;
-                //         points[i] = new Vector3(pointX, pointY, pointZ);
-                //         Debug.Log(points[i]);
-                //         if (maxLayerV < points[i].y / 2.0f)
-                //         {
-                //             maxLayerV = points[i].y / 2.0f;
-                //         }
-                //         if (minLayerV > points[i].y / 2.0f)
-                //         {
-                //             minLayerV = points[i].y / 2.0f;
-                //         }
-                //     }
-                // }
-                // else
-                // {
-                //     for (int i = 0; i < dataList[k].Count; i++)
-                //     {
-                        
-                //         pointX = dataList[k][i].x * 4.0f;
-                //         pointY = (float)(dataList[k][i].y - modifiedHeightBand * (k - numNegativeBands)) * 4.0f;
-                //         pointZ = dataList[k][i].z * 4.0f;
-                //         // points[i] = (dataList[k][i] - modifiedHeightBand * (k - 1)) * 4.0f;
-                //         // points[i] = dataList[k][i] * 4.0f;
-                //         points[i] = new Vector3(pointX, pointY, pointZ);
-                //         if (maxLayerV < points[i].y / 2.0f)
-                //         {
-                //             maxLayerV = points[i].y / 2.0f;
-                //         }
-                //         if (minLayerV > points[i].y / 2.0f)
-                //         {
-                //             minLayerV = points[i].y / 2.0f;
-                //         }
-                //     }
-                // }
+                else if (k < numNegativeBands && flagFlips)
+                {
+                    for (int kk = 0; kk < dataList[k].Count; kk++)
+                    {
+                        pointX = dataList[k][kk].x * 4.0f;
+                        pointY = 2.0f * (float)modifiedBaseLine - (float)(dataList[k][kk].y + modifiedHeightBand * (numNegativeBands - k - 1)) * 4.0f;
+                        pointZ = dataList[k][kk].z * 4.0f + zDepth * k;
+                        points[kk] = new Vector3(pointX, pointY, pointZ);
+                        if (maxLayerV < dataList[k][kk].y * 4.0f)
+                        {
+                            maxLayerV = dataList[k][kk].y * 4.0f;
+                        }
+                        if (minLayerV > dataList[k][kk].y * 4.0f)
+                        {
+                            minLayerV = dataList[k][kk].y * 4.0f;
+                        }
+                    }
+                }
+                else
+                {
+                    for (int kk = 0; kk < dataList[k].Count; kk++)
+                    {
+                        pointX = dataList[k][kk].x * 4.0f;
+                        pointY = (float)(dataList[k][kk].y - modifiedHeightBand * (k - numNegativeBands)) * 4.0f;
+                        pointZ = dataList[k][kk].z * 4.0f - zDepth * k;
+                        points[kk] = new Vector3(pointX, pointY, pointZ);
+                        if (maxLayerV < dataList[k][kk].y * 4.0f)
+                        {
+                            maxLayerV = dataList[k][kk].y * 4.0f;
+                        }
+                        if (minLayerV > dataList[k][kk].y * 4.0f)
+                        {
+                            minLayerV = dataList[k][kk].y * 4.0f;
+                        }
+                    }
+                }
 
                 GameObject fillAreaObject = new GameObject("FillArea");
                 fillAreaObject.transform.SetParent(visContainerObject.transform);
@@ -975,7 +992,7 @@ public class VisHorizonChart : Vis
                 mesh.vertices = points;
                 int[] triangles = new int[(points.Length - 1) * 3];
                 int index = 0;
-                if (k < numNegativeBands)
+                if (k < numNegativeBands && !flagFlips)
                 {
                     for (int i = 0; i < points.Length - 1; i++)
                     {
@@ -984,7 +1001,18 @@ public class VisHorizonChart : Vis
                         triangles[index++] = i;
                     }
                     meshRenderer.material = new Material(Shader.Find("Standard"));
-                    meshRenderer.material.color = ScaleColor.GetInterpolatedColor((maxLayerV + minLayerV) / 2, minV, baseLinePosition, selectedColorsNegative);
+                    meshRenderer.material.color = ScaleColor.GetInterpolatedColor((maxLayerV + minLayerV) / 2.0f, minV, modifiedBaseLine, selectedColorsNegative);
+                }
+                else if (k < numNegativeBands && flagFlips)
+                {
+                    for (int i = 0; i < points.Length - 1; i++)
+                    {
+                        triangles[index++] = i;
+                        triangles[index++] = i + 1;
+                        triangles[index++] = points.Length - i - 1;
+                    }
+                    meshRenderer.material = new Material(Shader.Find("Standard"));
+                    meshRenderer.material.color = ScaleColor.GetInterpolatedColor((maxLayerV + minLayerV) / 2.0f, minV, modifiedBaseLine, selectedColorsNegative);
                 }
                 else
                 {
@@ -995,7 +1023,7 @@ public class VisHorizonChart : Vis
                         triangles[index++] = points.Length - i - 1;
                     }
                     meshRenderer.material = new Material(Shader.Find("Standard"));
-                    meshRenderer.material.color = ScaleColor.GetInterpolatedColor((maxLayerV + minLayerV) / 2, baseLinePosition, maxV, selectedColorsPositive);
+                    meshRenderer.material.color = ScaleColor.GetInterpolatedColor((maxLayerV + minLayerV) / 2.0f, modifiedBaseLine, maxV, selectedColorsPositive);
                 }
                 mesh.triangles = triangles;
                 mesh.RecalculateNormals();
