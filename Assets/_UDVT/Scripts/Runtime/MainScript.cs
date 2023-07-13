@@ -388,17 +388,17 @@ public class MainScript : MonoBehaviour
         // Загрузка и обработка набора данных...
 
         // Создание родительских объектов для каждой визуализации
-        GameObject vis1ParentObj = new GameObject("Vis1 Parent");
-        vis1Parent = vis1ParentObj.transform;
+        //GameObject vis1ParentObj = new GameObject("Vis1 Parent");
+        //vis1Parent = vis1ParentObj.transform;
 
-        GameObject vis2ParentObj = new GameObject("Vis2 Parent");
-        vis2Parent = vis2ParentObj.transform;
+        //GameObject vis2ParentObj = new GameObject("Vis2 Parent");
+        //vis2Parent = vis2ParentObj.transform;
 
-        GameObject vis3ParentObj = new GameObject("Vis3 Parent");
-        vis3Parent = vis3ParentObj.transform;
+        //GameObject vis3ParentObj = new GameObject("Vis3 Parent");
+        //vis3Parent = vis3ParentObj.transform;
 
-        GameObject vis4ParentObj = new GameObject("Vis4 Parent");
-        vis4Parent = vis4ParentObj.transform;
+        //GameObject vis4ParentObj = new GameObject("Vis4 Parent");
+        //vis4Parent = vis4ParentObj.transform;
 
 
         ////Создание объектов визуализации и привязка их к соответствующим родительским объектам
@@ -432,6 +432,18 @@ public class MainScript : MonoBehaviour
 
         if (currentVisIndex == 0)
         {
+            LineRenderer[] lineRenderers = FindObjectsOfType<LineRenderer>();
+            foreach (LineRenderer lineRenderer in lineRenderers)
+            {
+                Destroy(lineRenderer.gameObject);
+            }
+
+            Destroy(GameObject.Find("VisBar"));
+            Destroy(GameObject.Find("Vis1 Parent"));
+
+            GameObject vis1ParentObj = new GameObject("Vis1 Parent");
+            vis1Parent = vis1ParentObj.transform;
+
             //Destroy(GameObject.Find("Vis1 Parent"));
             Destroy(GameObject.Find("Vis2 Parent"));
             Destroy(GameObject.Find("VisDensity"));
@@ -442,22 +454,29 @@ public class MainScript : MonoBehaviour
             Destroy(GameObject.Find("VisHorizon"));
 
 
-            LineRenderer[] lineRenderers = FindObjectsOfType<LineRenderer>();
-            foreach (LineRenderer lineRenderer in lineRenderers)
-            {
-                Destroy(lineRenderer);
-            }
-
 
 
             vis1 = Vis.GetSpecificVisType(VisType.BarChart);
             vis1.AppendData(dataSet);
             vis1.CreateVis(vis1ParentObj);
             //Destroy(vis1ParentObj);
+
         }
 
         if (currentVisIndex == 1)
         {
+            LineRenderer[] lineRenderers = FindObjectsOfType<LineRenderer>();
+            foreach (LineRenderer lineRenderer in lineRenderers)
+            {
+                Destroy(lineRenderer.gameObject);
+            }
+
+            Destroy(GameObject.Find("Vis2 Parent"));
+            Destroy(GameObject.Find("VisDensity"));
+
+            GameObject vis2ParentObj = new GameObject("Vis2 Parent");
+            vis2Parent = vis2ParentObj.transform;
+
             Destroy(GameObject.Find("VisBar"));
             Destroy(GameObject.Find("Vis1 Parent"));
             Destroy(GameObject.Find("VisViolin"));
@@ -466,11 +485,6 @@ public class MainScript : MonoBehaviour
             Destroy(GameObject.Find("VisHorizon"));
 
 
-            LineRenderer[] lineRenderers = FindObjectsOfType<LineRenderer>();
-            foreach (LineRenderer lineRenderer in lineRenderers)
-            {
-                Destroy(lineRenderer);
-            }
 
 
             vis2 = Vis.GetSpecificVisType(VisType.DensityChart);
@@ -480,6 +494,18 @@ public class MainScript : MonoBehaviour
 
         if (currentVisIndex == 2)
         {
+            LineRenderer[] lineRenderers = FindObjectsOfType<LineRenderer>();
+            foreach (LineRenderer lineRenderer in lineRenderers)
+            {
+                Destroy(lineRenderer.gameObject);
+            }
+
+            Destroy(GameObject.Find("VisViolin"));
+            Destroy(GameObject.Find("Vis3 Parent"));
+
+            GameObject vis3ParentObj = new GameObject("Vis3 Parent");
+            vis3Parent = vis3ParentObj.transform;
+
             Destroy(GameObject.Find("VisBar"));
             Destroy(GameObject.Find("VisDensity"));
             Destroy(GameObject.Find("LineRenderer"));
@@ -487,11 +513,8 @@ public class MainScript : MonoBehaviour
             Destroy(GameObject.Find("VisHorizon"));
 
 
-            LineRenderer[] lineRenderers = FindObjectsOfType<LineRenderer>();
-            foreach (LineRenderer lineRenderer in lineRenderers)
-            {
-                Destroy(lineRenderer);
-            }
+
+
 
             vis3 = Vis.GetSpecificVisType(VisType.ViolinChart);
             vis3.AppendData(dataSet);
@@ -501,19 +524,28 @@ public class MainScript : MonoBehaviour
 
         if (currentVisIndex == 3)
         {
+            LineRenderer[] lineRenderers = FindObjectsOfType<LineRenderer>();
+            foreach (LineRenderer lineRenderer in lineRenderers)
+            {
+                Destroy(lineRenderer.gameObject);
+            }
+
+            Destroy(GameObject.Find("Vis4 Parent"));
+            Destroy(GameObject.Find("VisHorizon"));
+
+            GameObject vis4ParentObj = new GameObject("Vis4 Parent");
+            vis4Parent = vis4ParentObj.transform;
+
             Destroy(GameObject.Find("VisBar"));
             Destroy(GameObject.Find("VisViolin"));
             Destroy(GameObject.Find("LineRenderer"));
             Destroy(GameObject.Find("VisBar"));
             Destroy(GameObject.Find("Vis1 Parent"));
-            Destroy(GameObject.Find("Vis1 Parent"));
+            Destroy(GameObject.Find("Vis2 Parent"));
+            Destroy(GameObject.Find("Vis3 Parent"));
             Destroy(GameObject.Find("VisDensity"));
 
-            LineRenderer[] lineRenderers = FindObjectsOfType<LineRenderer>();
-            foreach (LineRenderer lineRenderer in lineRenderers)
-            {
-                Destroy(lineRenderer);
-            }
+
 
             vis4 = Vis.GetSpecificVisType(VisType.HorizonChart);
             vis4.AppendData(dataSet);
@@ -798,6 +830,12 @@ public class MainScript : MonoBehaviour
 //            vis4.CreateVis(vis4ParentObj);
 
 //        }
+
+//    }
+
+
+//}
+
 
 //    }
 
