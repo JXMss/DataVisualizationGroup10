@@ -13,7 +13,8 @@ public enum VisType
     BarChart,
     DensityChart,
     ViolinChart,
-    NumberOfVisTypes
+    NumberOfVisTypes,
+    HorizonChart
 }
 
 /// <summary>
@@ -203,14 +204,16 @@ public class Vis
         switch (vistype)
         {
             default:
-            // case VisType.Scatterplot:
-            //     return new VisScatterplot();
-            // case VisType.BarChart:
-            //     return new VisBarChart();
-            // case VisType.DensityChart:
-            //     return new VisDensityChart();
-            case VisType.ViolinChart:
-                return new VisViolinChart();
+            case VisType.Scatterplot:
+                 return new VisScatterplot();
+            case VisType.BarChart:
+                 return new VisBarChart();
+            case VisType.DensityChart:
+                 return new VisDensityChart();
+            case VisType.ViolinChart: // ViolinChart
+                return new VisViolinChart(); //VisViolinChart
+            case VisType.HorizonChart: // ViolinChart
+                return new VisHorizonChart(); //VisViolinChart
         }
     }
 
