@@ -295,11 +295,11 @@ public class VisViolinChart : Vis//NewCode_Group10
     {
         base.CreateVis(container, flagMultiple, dataIndex);
 
-        double p25PositionX = GetTargetPointX(dataSets[0].ElementAt(0).Value, 0.25);
-        double pMedianPositionX = GetTargetPointX(dataSets[0].ElementAt(0).Value, 0.5);
-        double p75PositionX = GetTargetPointX(dataSets[0].ElementAt(0).Value, 0.75);
+        double p25PositionX = GetTargetPointX(dataSets[dataIndex].ElementAt(0).Value, 0.25);
+        double pMedianPositionX = GetTargetPointX(dataSets[dataIndex].ElementAt(0).Value, 0.5);
+        double p75PositionX = GetTargetPointX(dataSets[dataIndex].ElementAt(0).Value, 0.75);
 
-        double[,] DensityCalculate = KernelDensityEstimation.KDE(dataSets[0].ElementAt(0).Value, 1, 100);
+        double[,] DensityCalculate = KernelDensityEstimation.KDE(dataSets[dataIndex].ElementAt(0).Value, 1, 100);
         double[] xValues = Enumerable.Range(0, DensityCalculate.GetLength(0)).Select(i => DensityCalculate[i, 0]).ToArray();
         double[] yValues = Enumerable.Range(0, DensityCalculate.GetLength(0)).Select(i => DensityCalculate[i, 1]).ToArray();
         double[] xValuesMirrored = new double[xValues.Length*2];
@@ -317,7 +317,7 @@ public class VisViolinChart : Vis//NewCode_Group10
 
         //## 01:  Create Axes and Grids
         // X Axis
-        visContainer.CreateAxis(dataSets[0].ElementAt(0).Key, xValuesMirrored, Direction.X);
+        visContainer.CreateAxis(dataSets[dataIndex].ElementAt(0).Key, xValuesMirrored, Direction.X);
         // visContainer.CreateGrid(Direction.X, Direction.Y);
 
         // Y Axis

@@ -27,11 +27,11 @@ public class VisBarChart : Vis//NewCode_Group10
     {
         base.CreateVis(container, flagMultiple, dataIndex);
 
-        xyValues1 binData = SturgesFormulaBinning_1(dataSets[0].ElementAt(0).Value, "sturges");
+        xyValues1 binData = SturgesFormulaBinning_1(dataSets[dataIndex].ElementAt(0).Value, "sturges");
         //## 01:  Create Axes and Grids
         //VisBarChart.xyzTicks = { 10, 10, 10 };
         // X Axis
-        visContainer.CreateAxis(dataSets[0].ElementAt(0).Key, binData.xValues, Direction.X);
+        visContainer.CreateAxis(dataSets[dataIndex].ElementAt(0).Key, binData.xValues, Direction.X);
         visContainer.CreateGrid(Direction.X, Direction.Y);
 
         // Y Axis

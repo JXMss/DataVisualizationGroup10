@@ -22,12 +22,12 @@ public class VisDensityChart : Vis//NewCode_Group10
 
         //## 01:  Create Axes and Grids
         // X Axis
-        visContainer.CreateAxis(dataSets[0].ElementAt(0).Key, xValues, Direction.X);
+        visContainer.CreateAxis(dataSets[dataIndex].ElementAt(0).Key, xValues, Direction.X);
         visContainer.CreateGrid(Direction.X, Direction.Y);
 
         // Y Axis
         //visContainer.CreateAxis(dataSets[0].ElementAt(1).Key, binData.yValues, Direction.Y);
-        visContainer.CreateAxis("Counter", yValues, Direction.Y);
+        visContainer.CreateAxis("KDE", yValues, Direction.Y);
 
         //## 02: Set Remaining Vis Channels (Color,...)
         visContainer.SetChannel(VisChannel.XPos, xValues);

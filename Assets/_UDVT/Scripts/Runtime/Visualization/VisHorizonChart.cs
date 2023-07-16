@@ -26,7 +26,7 @@ public class VisHorizonChart : Vis//NewCode_Group10
             // Debug.Log(dataSets.GetType());
             for (int rawDataIndex = 0; rawDataIndex < dataSets[0].Count; rawDataIndex++)
             {
-                double[,] DensityCalculate = KernelDensityEstimation.KDE(dataSets[0].ElementAt(rawDataIndex).Value, 1, 100);
+                double[,] DensityCalculate = KernelDensityEstimation.KDE(dataSets[dataIndex].ElementAt(rawDataIndex).Value, 1, 100);
                 double[] xValues = Enumerable.Range(0, DensityCalculate.GetLength(0)).Select(i => DensityCalculate[i, 0]).ToArray();
                 double[] yValues = Enumerable.Range(0, DensityCalculate.GetLength(0)).Select(i => DensityCalculate[i, 1]).ToArray();
 
@@ -76,7 +76,7 @@ public class VisHorizonChart : Vis//NewCode_Group10
         }
         else
         {
-            double[,] DensityCalculate = KernelDensityEstimation.KDE(dataSets[0].ElementAt(0).Value, 1, 100);
+            double[,] DensityCalculate = KernelDensityEstimation.KDE(dataSets[dataIndex].ElementAt(0).Value, 1, 100);
             double[] xValues = Enumerable.Range(0, DensityCalculate.GetLength(0)).Select(i => DensityCalculate[i, 0]).ToArray();
             double[] yValues = Enumerable.Range(0, DensityCalculate.GetLength(0)).Select(i => DensityCalculate[i, 1]).ToArray();
             
