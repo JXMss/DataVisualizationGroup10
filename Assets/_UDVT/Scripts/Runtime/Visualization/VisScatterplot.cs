@@ -1,7 +1,7 @@
 using System.Linq;
 using UnityEngine;
 
-public class VisScatterplot : Vis
+public class VisScatterplot : Vis//NewCode_Group10
 {
     public VisScatterplot()
     {

@@ -9,7 +9,7 @@ using UnityEngine.UI;
 /// <summary>
 /// MainScript handles the activities needed at the start of the application.
 /// </summary>
-public class MainScript : MonoBehaviour
+public class MainScript : MonoBehaviour//NewCode_Group10
 {
     private FileLoadingManager fileLoadingManager;
     private List<Dictionary<string, double[]>> dataSet = new List<Dictionary<string, double[]>>();

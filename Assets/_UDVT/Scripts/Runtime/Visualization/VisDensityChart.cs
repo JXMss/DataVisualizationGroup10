@@ -3,7 +3,7 @@ using System;
 using UnityEngine;
 using System.Collections.Generic;
 
-public class VisDensityChart : Vis
+public class VisDensityChart : Vis//NewCode_Group10
 {
     public VisDensityChart()
     {

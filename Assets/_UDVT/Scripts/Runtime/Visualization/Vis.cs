@@ -90,7 +90,7 @@ public class Vis
     /// </summary>
     /// <param name="container"></param>
     /// <returns></returns>
-    public virtual GameObject CreateVis(GameObject container, bool flagMultiple, int dataIndex)
+    public virtual GameObject CreateVis(GameObject container, bool flagMultiple, int dataIndex)//NewCode_Group10
     {
 
         visContainer = new VisContainer();
@@ -205,7 +205,7 @@ public class Vis
         {
             default:
             case VisType.Scatterplot:
-                return new VisScatterplot();
+                return new VisScatterplot();//NewCode_Group10
             case VisType.BarChart:
                 return new VisBarChart();
             case VisType.DensityChart:

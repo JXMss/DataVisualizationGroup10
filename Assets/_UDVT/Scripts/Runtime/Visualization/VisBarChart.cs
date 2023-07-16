@@ -2,7 +2,7 @@ using System.Linq;
 using System;
 using UnityEngine;
 
-public class VisBarChart : Vis
+public class VisBarChart : Vis//NewCode_Group10
 {
     //public int[] xyzTicks = { 100, 100, 100 };
     //public virtual void InitVisParams(string visTitle, float width, float height, float depth, float[] xyzOffset, int[] xyzTicks, Color[] colorScheme)
