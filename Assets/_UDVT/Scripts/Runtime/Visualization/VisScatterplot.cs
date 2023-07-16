@@ -12,9 +12,9 @@ public class VisScatterplot : Vis
         tickMarkPrefab = (GameObject)Resources.Load("Prefabs/DataVisPrefabs/VisContainer/Tick");
     }
 
-    public override GameObject CreateVis(GameObject container)
+    public override GameObject CreateVis(GameObject container, bool flagMultiple, int dataIndex)
     {
-        base.CreateVis(container);
+        base.CreateVis(container, flagMultiple, dataIndex);
 
         //## 01:  Create Axes and Grids
 

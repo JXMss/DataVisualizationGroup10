@@ -13,8 +13,8 @@ public enum VisType
     BarChart,
     DensityChart,
     ViolinChart,
-    NumberOfVisTypes,
-    HorizonChart
+    HorizonChart,
+    NumberOfVisTypes
 }
 
 /// <summary>
@@ -90,7 +90,7 @@ public class Vis
     /// </summary>
     /// <param name="container"></param>
     /// <returns></returns>
-    public virtual GameObject CreateVis(GameObject container)
+    public virtual GameObject CreateVis(GameObject container, bool flagMultiple, int dataIndex)
     {
 
         visContainer = new VisContainer();
@@ -205,15 +205,15 @@ public class Vis
         {
             default:
             case VisType.Scatterplot:
-                 return new VisScatterplot();
+                return new VisScatterplot();
             case VisType.BarChart:
-                 return new VisBarChart();
+                return new VisBarChart();
             case VisType.DensityChart:
-                 return new VisDensityChart();
-            case VisType.ViolinChart: // ViolinChart
-                return new VisViolinChart(); //VisViolinChart
-            case VisType.HorizonChart: // ViolinChart
-                return new VisHorizonChart(); //VisViolinChart
+                return new VisDensityChart();
+            case VisType.ViolinChart:
+                return new VisViolinChart();
+            case VisType.HorizonChart:
+                return new VisHorizonChart();
         }
     }
 

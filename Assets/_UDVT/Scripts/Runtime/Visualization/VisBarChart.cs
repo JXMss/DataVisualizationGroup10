@@ -23,9 +23,9 @@ public class VisBarChart : Vis
         tickMarkPrefab = (GameObject)Resources.Load("Prefabs/DataVisPrefabs/VisContainer/Tick");
     }
 
-    public override GameObject CreateVis(GameObject container)
+    public override GameObject CreateVis(GameObject container, bool flagMultiple, int dataIndex)
     {
-        base.CreateVis(container);
+        base.CreateVis(container, flagMultiple, dataIndex);
 
         xyValues1 binData = SturgesFormulaBinning_1(dataSets[0].ElementAt(0).Value, "sturges");
         //## 01:  Create Axes and Grids

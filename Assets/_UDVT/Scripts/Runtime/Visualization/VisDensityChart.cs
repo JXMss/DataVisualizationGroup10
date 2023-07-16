@@ -12,9 +12,9 @@ public class VisDensityChart : Vis
         tickMarkPrefab = (GameObject)Resources.Load("Prefabs/DataVisPrefabs/VisContainer/Tick");
     }
 
-    public override GameObject CreateVis(GameObject container)
+    public override GameObject CreateVis(GameObject container, bool flagMultiple, int dataIndex)
     {
-        base.CreateVis(container);
+        base.CreateVis(container, flagMultiple, dataIndex);
 
         double[,] DensityCalculate = KernelDensityEstimation.KDE(dataSets[0].ElementAt(0).Value, 1, 100);
         double[] xValues = Enumerable.Range(0, DensityCalculate.GetLength(0)).Select(i => DensityCalculate[i, 0]).ToArray();

@@ -291,9 +291,9 @@ public class VisViolinChart : Vis
         tickMarkPrefab = (GameObject)Resources.Load("Prefabs/DataVisPrefabs/VisContainer/Tick");
     }
 
-    public override GameObject CreateVis(GameObject container)
+    public override GameObject CreateVis(GameObject container, bool flagMultiple, int dataIndex)
     {
-        base.CreateVis(container);
+        base.CreateVis(container, flagMultiple, dataIndex);
 
         double p25PositionX = GetTargetPointX(dataSets[0].ElementAt(0).Value, 0.25);
         double pMedianPositionX = GetTargetPointX(dataSets[0].ElementAt(0).Value, 0.5);

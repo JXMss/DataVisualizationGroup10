@@ -27,7 +27,7 @@ public class VisContainer
     private const float axisMeshLength = 1.0f;  // Length of Axis
     private Bounds containerBounds;             // Width, Height, Length of the Container
     private float[] xyzOffset;                  // Offset from origin (0,0) and End (1,0) for the Axes (x,y,z).
-    private int[] xyzTicks;                     // Number of Ticks for each Axis (x,y,z).
+    public int[] xyzTicks;                     // Number of Ticks for each Axis (x,y,z).
     private Color[] colorScheme;                // Color Scheme for DataMarks
     
     

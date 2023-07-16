@@ -35,8 +35,9 @@ public class FileLoadingManager
     /// The method decides which concrete loader to use based on the file extension found in the path.
     /// </summary>
     /// <returns></returns>
-    public async Task<FileType> LoadDataset()
+    public async Task<FileType> LoadDataset(string path)
     {
+        filePath = path;
         try
         {
             if (filePath == "")
