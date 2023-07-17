@@ -20,6 +20,8 @@ public class MainScript : MonoBehaviour//NewCode_Group10
     private Button Button3;
     private Button Button4;
     private Button Button5;
+    private Button Button6;
+    private Button Button7;
 
     private Vis vis1;
     private Vis vis2;
@@ -35,6 +37,8 @@ public class MainScript : MonoBehaviour//NewCode_Group10
 
     private int currentVisIndex = 0;
     private bool isInitialized = false; // Flag to track if initialization has been done
+    private int datasetIndexES = 0;
+    private int datasetIndex = 0;
 
     // Awake is called before Start
     void Awake()
@@ -50,6 +54,10 @@ public class MainScript : MonoBehaviour//NewCode_Group10
         Button3 = GameObject.Find("Button3").GetComponent<Button>();
         Button4 = GameObject.Find("Button4").GetComponent<Button>();
         Button5 = GameObject.Find("Button5").GetComponent<Button>();
+        Button6 = GameObject.Find("Button6").GetComponent<Button>();
+        Button7 = GameObject.Find("Button7").GetComponent<Button>();
+
+
 
         // Add click listeners to the buttons
         Button1.onClick.AddListener(Button1Click);
@@ -57,6 +65,10 @@ public class MainScript : MonoBehaviour//NewCode_Group10
         Button3.onClick.AddListener(Button3Click);
         Button4.onClick.AddListener(Button4Click);
         Button5.onClick.AddListener(Button5Click);
+        Button6.onClick.AddListener(Button6Click);
+        Button7.onClick.AddListener(Button7Click);
+
+
 
         Initialize();
     }
@@ -137,7 +149,52 @@ public class MainScript : MonoBehaviour//NewCode_Group10
 
     public async void LoadAndVisualize()
     {
-        int datasetIndex = 0;
+        Debug.Log(datasetIndex);
+
+
+        if (datasetIndex == 0)
+        {
+            LineRenderer[] lineRenderers = FindObjectsOfType<LineRenderer>();
+            foreach (LineRenderer lineRenderer in lineRenderers)
+            {
+                Destroy(lineRenderer.gameObject);
+            }
+            datasetIndex = 0;
+
+            Destroy(GameObject.Find("Vis2 Parent"));
+            Destroy(GameObject.Find("VisDensity"));
+            Destroy(GameObject.Find("Vis3 Parent"));
+            Destroy(GameObject.Find("Vis4 Parent"));
+            Destroy(GameObject.Find("VisViolin"));
+            Destroy(GameObject.Find("Vis4 Parent"));
+            Destroy(GameObject.Find("VisHorizon"));
+            Destroy(GameObject.Find("Vis5 Parent"));
+
+
+        }
+
+        if (datasetIndex == 1)
+        {
+            LineRenderer[] lineRenderers = FindObjectsOfType<LineRenderer>();
+            foreach (LineRenderer lineRenderer in lineRenderers)
+            {
+                Destroy(lineRenderer.gameObject);
+            }
+
+            datasetIndex = 1;
+
+            Destroy(GameObject.Find("Vis2 Parent"));
+            Destroy(GameObject.Find("VisDensity"));
+            Destroy(GameObject.Find("Vis3 Parent"));
+            Destroy(GameObject.Find("Vis4 Parent"));
+            Destroy(GameObject.Find("VisViolin"));
+            Destroy(GameObject.Find("Vis4 Parent"));
+            Destroy(GameObject.Find("VisHorizon"));
+            Destroy(GameObject.Find("Vis5 Parent"));
+
+
+        }
+
         if (currentVisIndex == 0)
         {
             LineRenderer[] lineRenderers = FindObjectsOfType<LineRenderer>();
@@ -160,6 +217,8 @@ public class MainScript : MonoBehaviour//NewCode_Group10
             Destroy(GameObject.Find("VisViolin"));
             Destroy(GameObject.Find("Vis4 Parent"));
             Destroy(GameObject.Find("VisHorizon"));
+            Destroy(GameObject.Find("Vis5 Parent"));
+
 
 
             vis1 = Vis.GetSpecificVisType(VisType.BarChart);
@@ -190,6 +249,8 @@ public class MainScript : MonoBehaviour//NewCode_Group10
             Destroy(GameObject.Find("Vis3 Parent"));
             Destroy(GameObject.Find("Vis4 Parent"));
             Destroy(GameObject.Find("VisHorizon"));
+            Destroy(GameObject.Find("Vis5 Parent"));
+
 
 
             vis2 = Vis.GetSpecificVisType(VisType.DensityChart);
@@ -220,6 +281,8 @@ public class MainScript : MonoBehaviour//NewCode_Group10
             Destroy(GameObject.Find("LineRenderer"));
             Destroy(GameObject.Find("Vis4 Parent"));
             Destroy(GameObject.Find("VisHorizon"));
+            Destroy(GameObject.Find("Vis5 Parent"));
+
 
 
             vis3 = Vis.GetSpecificVisType(VisType.ViolinChart);
@@ -254,6 +317,8 @@ public class MainScript : MonoBehaviour//NewCode_Group10
             Destroy(GameObject.Find("Vis2 Parent"));
             Destroy(GameObject.Find("Vis3 Parent"));
             Destroy(GameObject.Find("VisDensity"));
+            Destroy(GameObject.Find("Vis5 Parent"));
+
 
 
             vis4 = Vis.GetSpecificVisType(VisType.HorizonChart);
@@ -273,6 +338,7 @@ public class MainScript : MonoBehaviour//NewCode_Group10
                 Destroy(lineRenderer.gameObject);
             }
 
+
             Destroy(GameObject.Find("Vis5 Parent"));
             Destroy(GameObject.Find("VisHorizon"));
 
@@ -289,6 +355,8 @@ public class MainScript : MonoBehaviour//NewCode_Group10
             Destroy(GameObject.Find("Vis2 Parent"));
             Destroy(GameObject.Find("Vis3 Parent"));
             Destroy(GameObject.Find("Vis4 Parent"));
+            //Destroy(GameObject.Find("Vis5 Parent"));
+
 
 
             vis5 = Vis.GetSpecificVisType(VisType.HorizonChart);
@@ -330,4 +398,47 @@ public class MainScript : MonoBehaviour//NewCode_Group10
         currentVisIndex = 4;
         LoadAndVisualize();
     }
+
+    private void Button6Click()
+    {
+        LineRenderer[] lineRenderers = FindObjectsOfType<LineRenderer>();
+        foreach (LineRenderer lineRenderer in lineRenderers)
+        {
+            Destroy(lineRenderer.gameObject);
+        }
+        datasetIndex = 0;
+
+        Destroy(GameObject.Find("Vis2 Parent"));
+        Destroy(GameObject.Find("VisDensity"));
+        Destroy(GameObject.Find("Vis3 Parent"));
+        Destroy(GameObject.Find("Vis4 Parent"));
+        Destroy(GameObject.Find("VisViolin"));
+        Destroy(GameObject.Find("Vis4 Parent"));
+        Destroy(GameObject.Find("VisHorizon"));
+        Destroy(GameObject.Find("Vis5 Parent"));
+
+        LoadAndVisualize();
+    }
+
+    private void Button7Click()
+    {
+        LineRenderer[] lineRenderers = FindObjectsOfType<LineRenderer>();
+        foreach (LineRenderer lineRenderer in lineRenderers)
+        {
+            Destroy(lineRenderer.gameObject);
+        }
+        datasetIndex = 1;
+
+        Destroy(GameObject.Find("Vis2 Parent"));
+        Destroy(GameObject.Find("VisDensity"));
+        Destroy(GameObject.Find("Vis3 Parent"));
+        Destroy(GameObject.Find("Vis4 Parent"));
+        Destroy(GameObject.Find("VisViolin"));
+        Destroy(GameObject.Find("Vis4 Parent"));
+        Destroy(GameObject.Find("VisHorizon"));
+        Destroy(GameObject.Find("Vis5 Parent"));
+
+        LoadAndVisualize();
+    }
+
 }
