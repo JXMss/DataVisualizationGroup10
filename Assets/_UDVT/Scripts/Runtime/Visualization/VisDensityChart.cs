@@ -16,7 +16,7 @@ public class VisDensityChart : Vis//NewCode_Group10
     {
         base.CreateVis(container, flagMultiple, dataIndex);
 
-        double[,] DensityCalculate = KernelDensityEstimation.KDE(dataSets[0].ElementAt(0).Value, 1, 100);
+        double[,] DensityCalculate = KernelDensityEstimation.KDE(dataSets[dataIndex].ElementAt(0).Value, 1, 100);
         double[] xValues = Enumerable.Range(0, DensityCalculate.GetLength(0)).Select(i => DensityCalculate[i, 0]).ToArray();
         double[] yValues = Enumerable.Range(0, DensityCalculate.GetLength(0)).Select(i => DensityCalculate[i, 1]).ToArray();
 

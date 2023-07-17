@@ -24,7 +24,7 @@ public class VisHorizonChart : Vis//NewCode_Group10
         if (flagMultiple)
         {
             // Debug.Log(dataSets.GetType());
-            for (int rawDataIndex = 0; rawDataIndex < dataSets[0].Count; rawDataIndex++)
+            for (int rawDataIndex = 0; rawDataIndex < dataSets[dataIndex].Count; rawDataIndex++)
             {
                 double[,] DensityCalculate = KernelDensityEstimation.KDE(dataSets[dataIndex].ElementAt(rawDataIndex).Value, 1, 100);
                 double[] xValues = Enumerable.Range(0, DensityCalculate.GetLength(0)).Select(i => DensityCalculate[i, 0]).ToArray();
